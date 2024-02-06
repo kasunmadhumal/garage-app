@@ -1,0 +1,658 @@
+{
+	"info": {
+		"_postman_id": "6c3a64d0-2f3b-4b1b-a513-c4d179715920",
+		"name": "garage-application",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18510572"
+	},
+	"item": [
+		{
+			"name": "Customers",
+			"item": [
+				{
+					"name": "customer auth",
+					"item": [
+						{
+							"name": "login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"login test\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    var token = \"Bearer \" + jsonData.access_token;",
+											"    pm.collectionVariables.set(\"jwt-token-customer\", token);",
+											"    console.log(token);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n     \"email\" : {{email}},\n     \"password\" : {{password}}    \n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url-customer-service}}/api/v1/auth/authenticate",
+									"host": [
+										"{{url-customer-service}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"authenticate"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "test api",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"login test\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    var token = \"Bearer \" + jsonData.access_token;",
+											"    pm.collectionVariables.set(\"jwt-token\", token);",
+											"    console.log(token);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n     \"email\" : {{email}},\n     \"password\" : {{password}}    \n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url-customer-service}}/api/v1/auth/test",
+									"host": [
+										"{{url-customer-service}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"test"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create account",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n     \"firstname\" : \"kasun\",\n     \"lastname\" : \"madhumal\",\n     \"email\" : {{email}},\n     \"password\" : {{password}},\n     \"role\" : \"NORMAL_USER\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url-customer-service}}/api/v1/auth/register",
+									"host": [
+										"{{url-customer-service}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"register"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "customer account",
+					"item": [
+						{
+							"name": "create account",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{jwt-token-customer}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n      \"firstName\" : \"kasun\",\n      \"lastName\" : \"madhumal\",\n      \"email\" : \"user1@gmail.com\",\n      \"ownerVehicles\" : []\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url-customer-service}}/api/v1/customer-account/create",
+									"host": [
+										"{{url-customer-service}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"customer-account",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get account details",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{jwt-token-customer}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n      \"firstName\" : \"kasun\",\n      \"lastName\" : \"madhumal\",\n      \"email\" : \"user1@gmail.com\",\n      \"ownerVehicles\" : []\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url-customer-service}}/api/v1/customer-account/user1@gmail.com",
+									"host": [
+										"{{url-customer-service}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"customer-account",
+										"user1@gmail.com"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update account details",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{jwt-token-customer}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n      \"firstName\" : \"kasun\",\n      \"lastName\" : \"jeewantha\",\n      \"email\" : \"user1@gmail.com\",\n      \"ownerVehicles\" : []\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url-customer-service}}/api/v1/customer-account/update",
+									"host": [
+										"{{url-customer-service}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"customer-account",
+										"update"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "customer vehicles",
+					"item": [
+						{
+							"name": "add vehicle",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{jwt-token-customer}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "    {\n        \"model\": \"Civic\",\n        \"vehicleNumber\": \"XYZ789\",\n        \"year\": \"2021\",\n        \"fuelType\": \"Gasoline\",\n        \"vehicleType\": \"Sedan\",\n        \"numberOfSeats\": 5,\n        \"numberOfDoors\": 4,\n        \"distanceLimit\": 5000.56,\n        \"ownerEmail\": {{email}}\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url-customer-service}}/api/v1/customer-vehicle/add",
+									"host": [
+										"{{url-customer-service}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"customer-vehicle",
+										"add"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update vehicle",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{jwt-token-customer}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "  {\n        \"model\": \"BMW\",\n        \"vehicleNumber\": \"XYZ789\",\n        \"year\": \"2021\",\n        \"fuelType\": \"Gasoline\",\n        \"vehicleType\": \"Sedan\",\n        \"numberOfSeats\": 5,\n        \"numberOfDoors\": 4,\n        \"distanceLimit\": 5000.56,\n        \"ownerEmail\": {{email}}\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url-customer-service}}/api/v1/customer-vehicle/update",
+									"host": [
+										"{{url-customer-service}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"customer-vehicle",
+										"update"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "all user vehicles",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{jwt-token-customer}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{url-customer-service}}/api/v1/customer-vehicle/all-vehicles/user1@gmail.com",
+									"host": [
+										"{{url-customer-service}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"customer-vehicle",
+										"all-vehicles",
+										"user1@gmail.com"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Time slot booking service",
+					"item": [
+						{
+							"name": "get all booked time slots",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{jwt-token-customer}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{url-customer-service}}/api/v1/time-slots/booked",
+									"host": [
+										"{{url-customer-service}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"time-slots",
+										"booked"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "available time slots",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{jwt-token-customer}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{url-customer-service}}/api/v1/time-slots/available",
+									"host": [
+										"{{url-customer-service}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"time-slots",
+										"available"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "accepted bookings",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{jwt-token-customer}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{url-customer-service}}/api/v1/time-slots/accepted",
+									"host": [
+										"{{url-customer-service}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"time-slots",
+										"accepted"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete booking",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{jwt-token-customer}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{url-customer-service}}/api/v1/time-slots/delete/c1b3afde-aa9b-4cc1-8906-aa7e9680a288",
+									"host": [
+										"{{url-customer-service}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"time-slots",
+										"delete",
+										"c1b3afde-aa9b-4cc1-8906-aa7e9680a288"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "booked time slot",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{jwt-token-customer}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{    \n        \"key\": \"5630042f-e853-46a4-8486-6a063285bdcf\",\n        \"status\": \"available\",\n        \"acceptedStatus\" : \"pending\",\n        \"timeSlotAllocatedDate\": \"2021-12-12\",\n        \"timeSlotAllocatedTime\": \"12:00\",\n        \"timeSlotAllocatedDuration\": \"4 hour\",\n        \"timeSlotAllocatedService\": \"car wash\",\n        \"numberOfVehiclesMaxAllowedForService\": 10,\n        \"availableBookingCountForService\": 9,\n        \"timeSlotAllocatedServiceDiscount\": 0.0,\n        \"timeSlotAllocatedVehicles\" : [\n                {\n                    \"model\": \"Civic\",\n                    \"vehicleNumber\": \"XYZ789\",\n                    \"year\": \"2021\",\n                    \"fuelType\": \"Gasoline\",\n                    \"vehicleType\": \"Sedan\",\n                    \"numberOfSeats\": 5,\n                    \"numberOfDoors\": 4,\n                    \"distanceLimit\": 5000.56,\n                    \"ownerEmail\": {{email}}\n                }\n       ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url-customer-service}}/api/v1/time-slots/book",
+									"host": [
+										"{{url-customer-service}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"time-slots",
+										"book"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update booked time slot",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{jwt-token-customer}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{    \n        \"timeSlotAllocatedDate\": \"2024-02-01\",\n        \"timeSlotAllocatedTime\": \"13:00 AM\",\n        \"timeSlotAllocatedDuration\": \"1 hour\",\n        \"timeSlotAllocatedService\": \"Car Wash\",\n        \"status\": \"Available\",\n        \"numberOfVehiclesMaxAllowedForService\": 5,\n        \"availableBookingCountForService\": 3,\n        \"timeSlotAllocatedServiceDiscount\": 10.5,\n       \"timeSlotAllocatedVehicles\" : [\n            {\n        \"model\": \"Civic\",\n        \"vehicleNumber\": \"XYZ789\",\n        \"year\": \"2021\",\n        \"fuelType\": \"Gasoline\",\n        \"vehicleType\": \"Sedan\",\n        \"numberOfSeats\": 5,\n        \"numberOfDoors\": 4,\n        \"distanceLimit\": 5000.56,\n        \"ownerEmail\": {{email}}\n            }\n       ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url-customer-service}}/api/v1/time-slots/update/84be1cdb-73d8-4f2e-b89e-d6eb3f2b8d90",
+									"host": [
+										"{{url-customer-service}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"time-slots",
+										"update",
+										"84be1cdb-73d8-4f2e-b89e-d6eb3f2b8d90"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "garage",
+			"item": [
+				{
+					"name": "add time slot",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/garage/update-timeslot",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"garage",
+								"update-timeslot"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "booked time slots",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/garage/booked-time-slots",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"garage",
+								"booked-time-slots"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "accep time slot",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n        \"key\": \"5630042f-e853-46a4-8486-6a063285bdcf\",\n        \"status\": \"accept\",\n        \"acceptedStatus\": \"accepted\",\n        \"timeSlotAllocatedDate\": \"2021-12-12\",\n        \"timeSlotAllocatedTime\": \"12:00\",\n        \"timeSlotAllocatedDuration\": \"4 hour\",\n        \"timeSlotAllocatedService\": \"car wash\",\n        \"numberOfVehiclesMaxAllowedForService\": 10,\n        \"availableBookingCountForService\": 9,\n        \"timeSlotAllocatedServiceDiscount\": 0.0,\n        \"timeSlotAllocatedVehicles\": [\n            {\n                \"model\": \"Civic\",\n                \"vehicleNumber\": \"XYZ789\",\n                \"year\": \"2021\",\n                \"fuelType\": \"Gasoline\",\n                \"vehicleType\": \"Sedan\",\n                \"numberOfSeats\": 5,\n                \"numberOfDoors\": 4,\n                \"distanceLimit\": 5000.56\n            }\n        ]\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/garage/accept-time-slot",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"garage",
+								"accept-time-slot"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "jwt-token-customer",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "email",
+			"value": "\"user1@gmail.com\"",
+			"type": "string"
+		},
+		{
+			"key": "password",
+			"value": "\"1234\"",
+			"type": "string"
+		},
+		{
+			"key": "url-customer-service",
+			"value": "http://localhost:8085",
+			"type": "string"
+		}
+	]
+}
