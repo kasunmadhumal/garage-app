@@ -1,0 +1,61 @@
+package com.isa.customerservice.bookingTimeSlotsService.controllers;
+
+import com.isa.customerservice.bookingTimeSlotsService.dtos.AcceptedBookings;
+import com.isa.customerservice.bookingTimeSlotsService.dtos.AvailableTimeSlot;
+import com.isa.customerservice.bookingTimeSlotsService.dtos.BookedTimeSlotDetails;
+import com.isa.customerservice.bookingTimeSlotsService.models.BookedServiceTimeSlot;
+import com.isa.customerservice.bookingTimeSlotsService.services.BookingTimeSlotService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/api/v1/time-slots")
+public class BookingTimeSlotController {
+
+    private final BookingTimeSlotService bookingTimeSlotService;
+
+    public BookingTimeSlotController(BookingTimeSlotService bookingTimeSlotService){
+        this.bookingTimeSlotService = bookingTimeSlotService;
+    }
+
+    @PreAuthorize("hasRole('ROLE_NORMAL_USER')")
+    @GetMapping("/booked")
+    public Optional<List<BookedServiceTimeSlot>> bookedServiceTimeSlots(){
+        return ResponseEntity.ok(bookingTimeSlotService.bookedServiceTimeSlots()).getBody();
+    }
+
+    @PreAuthorize("hasRole('ROLE_NORMAL_USER')")
+    @PostMapping("/book")
+    public Optional<String> bookServiceTimeSlot(@RequestBody BookedTimeSlotDetails bookedTimeSlotDetails){
+        return ResponseEntity.ok(bookingTimeSlotService.bookServiceTimeSlot(bookedTimeSlotDetails)).getBody();
+    }
+
+    @PreAuthorize("hasRole('ROLE_NORMAL_USER')")
+    @PutMapping("/update/{id}")
+    public Optional<String> updateServiceTimeSlot(@PathVariable("id") String id, @RequestBody BookedTimeSlotDetails bookedTimeSlotDetails){
+        return ResponseEntity.ok(bookingTimeSlotService.updateServiceTimeSlot(bookedTimeSlotDetails, id)).getBody();
+    }
+
+    @PreAuthorize("hasRole('ROLE_NORMAL_USER')")
+    @DeleteMapping("/delete/{id}")
+    public String deleteServiceTimeSlot(@PathVariable("id") String id){
+        return ResponseEntity.ok(bookingTimeSlotService.deleteServiceTimeSlot(id).orElse(null)).getBody();
+    }
+
+    @PreAuthorize("hasRole('ROLE_NORMAL_USER')")
+    @GetMapping("/available")
+    public List<AvailableTimeSlot> availableTimeSlots(){
+        return ResponseEntity.ok(bookingTimeSlotService.getAvailableTimeSlots()).getBody();
+    }
+
+    @PreAuthorize("hasRole('ROLE_NORMAL_USER')")
+    @GetMapping("/accepted")
+    public List<AcceptedBookings> acceptedBookings(){
+        return ResponseEntity.ok(bookingTimeSlotService.getAcceptedBookings()).getBody();
+    }
+
+}

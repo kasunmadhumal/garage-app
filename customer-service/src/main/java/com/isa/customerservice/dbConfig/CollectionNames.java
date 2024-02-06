@@ -2,12 +2,12 @@ package com.isa.customerservice.dbConfig;
 
 public class CollectionNames {
 
-    public static final String TOKEN_COLLECTION = "token";
+    public static final String TOKEN_COLLECTION = "token_details";
     public static final String USER_COLLECTION = "user";
 
-    public static final String VEHICLE_COLLECTION = "vehicle";
+    public static final String CUSTOMER_ACCOUNT_COLLECTION = "customer_account";
 
-    public static final String VEHICLE_OWNER_ACCOUNT_COLLECTION = "vehicle_owner_account";
+    public static final String BOOKED_SERVICE_TIME_SLOT_COLLECTION = "booked_service_time_slot";
 
 
 }

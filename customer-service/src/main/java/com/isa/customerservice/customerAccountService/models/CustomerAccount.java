@@ -1,6 +1,5 @@
-package com.isa.customerservice.authService.token;
+package com.isa.customerservice.customerAccountService.models;
 
-import com.isa.customerservice.authService.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,44 +10,36 @@ import org.springframework.data.couchbase.core.mapping.Field;
 import org.springframework.data.couchbase.repository.Collection;
 
 import java.util.Date;
+import java.util.List;
 
-import static com.isa.customerservice.dbConfig.CollectionNames.TOKEN_COLLECTION;
+import static com.isa.customerservice.dbConfig.CollectionNames.CUSTOMER_ACCOUNT_COLLECTION;
+
+
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Collection(TOKEN_COLLECTION)
+@Collection(CUSTOMER_ACCOUNT_COLLECTION)
 @Document
-public class Token {
-
+public class CustomerAccount {
     @Id
     private String id;
-
     @Field
-    private String token;
-
+    private String firstName;
     @Field
-    private TokenType tokenType;
-
+    private String lastName;
     @Field
-    private boolean revoked;
-
+    private String email;
     @Field
-    private boolean expired;
-
-    @Field
-    private User user;
+    private List<Vehicle> ownerVehicles;
 
     @LastModifiedBy
     private String lastModifiedBy;
-
     @LastModifiedDate
     private Date lastModification;
-
     @CreatedDate
     private Date creationDate;
-
     @Version
     private long version;
 
