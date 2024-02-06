@@ -21,6 +21,8 @@ public class AcceptedBookings {
 
     private String acceptedStatus;
 
+    private String userEmailAddress;
+
     private String timeSlotAllocatedDate;
 
     private String timeSlotAllocatedTime;

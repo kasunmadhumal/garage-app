@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldNameConstants;
 import org.springframework.data.annotation.*;
 import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.Field;
@@ -13,6 +14,7 @@ import org.springframework.data.couchbase.repository.Collection;
 import java.util.Date;
 import java.util.List;
 
+import static com.isa.customerservice.dbConfig.CollectionNames.ACCEPTED_BOOKING_COLLECTION;
 import static com.isa.customerservice.dbConfig.CollectionNames.BOOKED_SERVICE_TIME_SLOT_COLLECTION;
 
 
@@ -20,21 +22,26 @@ import static com.isa.customerservice.dbConfig.CollectionNames.BOOKED_SERVICE_TI
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Collection(BOOKED_SERVICE_TIME_SLOT_COLLECTION)
+@Collection(ACCEPTED_BOOKING_COLLECTION)
 @Document
-public class BookedServiceTimeSlot {
+public class AcceptedBookingTimeslot {
 
     @Id
     private String id;
-
     @Field
     private String key;
 
     @Field
-    private String timeSlotAllocatedDate;
+    private String status;
+
+    @Field
+    private String acceptedStatus;
 
     @Field
     private String userEmailAddress;
+
+    @Field
+    private String timeSlotAllocatedDate;
 
     @Field
     private String timeSlotAllocatedTime;
@@ -57,12 +64,6 @@ public class BookedServiceTimeSlot {
     @Field
     private List<Vehicle> timeSlotAllocatedVehicles;
 
-    @Field
-    private String status;
-
-    @Field
-    private String acceptedStatus;
-
     @LastModifiedBy
     private String lastModifiedBy;
 
@@ -74,5 +75,4 @@ public class BookedServiceTimeSlot {
 
     @Version
     private long version;
-
 }

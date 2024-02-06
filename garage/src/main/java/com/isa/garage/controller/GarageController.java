@@ -33,15 +33,16 @@ public class GarageController {
         return garageService.acceptTimeSlot(acceptedBookings);
     }
 
-    @PutMapping("/update-timeslot")
+    @PostMapping("/update-timeslot")
     public ResponseEntity<Map<String, String>> addServiceBookingTimeslot() throws InterruptedException {
 
-        int range = 100;
+        int range = 1;
         while (range > 0) {
             boolean result = garageService.addServiceBookingTimeslot(
                  AvailableTimeSlot.builder()
                             .key(UUID.randomUUID().toString())
                             .status("available")
+                            .userEmailAddress("")
                             .timeSlotAllocatedDate("2021-12-12")
                             .timeSlotAllocatedTime("12:00")
                             .timeSlotAllocatedDuration("4 hour")

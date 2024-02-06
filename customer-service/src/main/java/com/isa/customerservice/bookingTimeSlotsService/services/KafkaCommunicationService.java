@@ -4,15 +4,20 @@ import com.couchbase.client.core.deps.com.fasterxml.jackson.databind.ObjectMappe
 import com.isa.customerservice.bookingTimeSlotsService.dtos.AcceptedBookings;
 import com.isa.customerservice.bookingTimeSlotsService.dtos.AvailableTimeSlot;
 import com.isa.customerservice.bookingTimeSlotsService.dtos.BookedTimeSlotDetails;
+import com.isa.customerservice.bookingTimeSlotsService.models.AcceptedBookingTimeslot;
+import com.isa.customerservice.bookingTimeSlotsService.repositories.IAcceptedBookingTimeSlotRepository;
+import com.isa.customerservice.bookingTimeSlotsService.repositories.IBookedTimeSlotRepository;
+import com.isa.customerservice.customerAccountService.models.Vehicle;
 import com.isa.customerservice.kafkaConfig.constant.TopicsNames;
 import lombok.Getter;
+import org.springframework.data.couchbase.core.mapping.Field;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.UUID;
 
 
 @Getter
@@ -26,12 +31,18 @@ public class KafkaCommunicationService {
 
     private final KafkaTemplate<String, BookedTimeSlotDetails> kafkaTemplateForBookedTimeSlot;
 
+    private final IAcceptedBookingTimeSlotRepository acceptedBookingTimeSlotRepository;
+
+    private final IBookedTimeSlotRepository bookedTimeSlotRepository;
 
 
 
 
-    public KafkaCommunicationService(KafkaTemplate<String, BookedTimeSlotDetails> kafkaTemplateForBookedTimeSlot) {
+
+    public KafkaCommunicationService(KafkaTemplate<String, BookedTimeSlotDetails> kafkaTemplateForBookedTimeSlot, IAcceptedBookingTimeSlotRepository acceptedBookingTimeSlotRepository, IBookedTimeSlotRepository bookedTimeSlotRepository) {
         this.kafkaTemplateForBookedTimeSlot = kafkaTemplateForBookedTimeSlot;
+        this.acceptedBookingTimeSlotRepository = acceptedBookingTimeSlotRepository;
+        this.bookedTimeSlotRepository = bookedTimeSlotRepository;
     }
 
         @KafkaListener(topics = "available-time-slots", groupId = "user-group")
@@ -42,7 +53,9 @@ public class KafkaCommunicationService {
                     String json = object.substring(1, object.length() - 1);
                     ObjectMapper objectMapper = new ObjectMapper();
                     AvailableTimeSlot resultObject = objectMapper.readValue(json, AvailableTimeSlot.class);
-                    availableTimeSlots.add(resultObject);
+                    if(resultObject.getStatus().equals("available")){
+                        availableTimeSlots.add(resultObject);
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -60,6 +73,25 @@ public class KafkaCommunicationService {
                 ObjectMapper objectMapper = new ObjectMapper();
                 AcceptedBookings resultObject = objectMapper.readValue(json, AcceptedBookings.class);
                 this.acceptedBookings.add(resultObject);
+                bookedTimeSlotRepository.deleteByKey(resultObject.getKey());
+
+                AcceptedBookingTimeslot acceptedBookingTimeslot = AcceptedBookingTimeslot.builder()
+                        .id(UUID.randomUUID().toString())
+                        .key(resultObject.getKey())
+                        .status(resultObject.getStatus())
+                        .acceptedStatus(resultObject.getAcceptedStatus())
+                        .userEmailAddress(resultObject.getUserEmailAddress())
+                        .timeSlotAllocatedDate(resultObject.getTimeSlotAllocatedDate())
+                        .timeSlotAllocatedTime(resultObject.getTimeSlotAllocatedTime())
+                        .timeSlotAllocatedDuration(resultObject.getTimeSlotAllocatedDuration())
+                        .timeSlotAllocatedService(resultObject.getTimeSlotAllocatedService())
+                        .numberOfVehiclesMaxAllowedForService(resultObject.getNumberOfVehiclesMaxAllowedForService())
+                        .availableBookingCountForService(resultObject.getAvailableBookingCountForService())
+                        .timeSlotAllocatedServiceDiscount(resultObject.getTimeSlotAllocatedServiceDiscount())
+                        .timeSlotAllocatedVehicles(resultObject.getTimeSlotAllocatedVehicles())
+                        .build();
+
+                acceptedBookingTimeSlotRepository.save(acceptedBookingTimeslot);
             }
         } catch (Exception e) {
             e.printStackTrace();

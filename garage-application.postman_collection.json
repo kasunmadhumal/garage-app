@@ -370,7 +370,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{url-customer-service}}/api/v1/time-slots/booked",
+									"raw": "{{url-customer-service}}/api/v1/time-slots/booked/p@gmail.com",
 									"host": [
 										"{{url-customer-service}}"
 									],
@@ -378,7 +378,8 @@
 										"api",
 										"v1",
 										"time-slots",
-										"booked"
+										"booked",
+										"p@gmail.com"
 									]
 								}
 							},
@@ -464,7 +465,7 @@
 							"response": []
 						},
 						{
-							"name": "booked time slot",
+							"name": "book time slot",
 							"request": {
 								"method": "POST",
 								"header": [
@@ -476,7 +477,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{    \n        \"key\": \"5630042f-e853-46a4-8486-6a063285bdcf\",\n        \"status\": \"available\",\n        \"acceptedStatus\" : \"pending\",\n        \"timeSlotAllocatedDate\": \"2021-12-12\",\n        \"timeSlotAllocatedTime\": \"12:00\",\n        \"timeSlotAllocatedDuration\": \"4 hour\",\n        \"timeSlotAllocatedService\": \"car wash\",\n        \"numberOfVehiclesMaxAllowedForService\": 10,\n        \"availableBookingCountForService\": 9,\n        \"timeSlotAllocatedServiceDiscount\": 0.0,\n        \"timeSlotAllocatedVehicles\" : [\n                {\n                    \"model\": \"Civic\",\n                    \"vehicleNumber\": \"XYZ789\",\n                    \"year\": \"2021\",\n                    \"fuelType\": \"Gasoline\",\n                    \"vehicleType\": \"Sedan\",\n                    \"numberOfSeats\": 5,\n                    \"numberOfDoors\": 4,\n                    \"distanceLimit\": 5000.56,\n                    \"ownerEmail\": {{email}}\n                }\n       ]\n}",
+									"raw": "{    \n\n        \"key\": \"63c2af6-1c43-42c2-9d41-d4eb1bcc1aab\",\n        \"status\": \"available\",\n        \"acceptedStatus\" : \"pending\",\n        \"userEmailAddress\": {{email}},\n        \"timeSlotAllocatedDate\": \"2021-12-12\",\n        \"timeSlotAllocatedTime\": \"12:00\",\n        \"timeSlotAllocatedDuration\": \"4 hour\",\n        \"timeSlotAllocatedService\": \"car wash\",\n        \"numberOfVehiclesMaxAllowedForService\": 10,\n        \"availableBookingCountForService\": 10,\n        \"timeSlotAllocatedServiceDiscount\": 0.0,\n        \"timeSlotAllocatedVehicles\" : [\n                {\n                    \"model\": \"Civic\",\n                    \"vehicleNumber\": \"XYZ789\",\n                    \"year\": \"2021\",\n                    \"fuelType\": \"Gasoline\",\n                    \"vehicleType\": \"Sedan\",\n                    \"numberOfSeats\": 5,\n                    \"numberOfDoors\": 4,\n                    \"distanceLimit\": 5000.56,\n                    \"ownerEmail\": {{email}}\n                }\n       ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -544,8 +545,17 @@
 				{
 					"name": "add time slot",
 					"request": {
-						"method": "PUT",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://localhost:8080/garage/update-timeslot",
 							"protocol": "http",
@@ -582,7 +592,7 @@
 					"response": []
 				},
 				{
-					"name": "accep time slot",
+					"name": "accep booking time-slot",
 					"request": {
 						"method": "POST",
 						"header": [],

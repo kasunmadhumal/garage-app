@@ -32,6 +32,12 @@ public class GarageService {
         return true;
     }
 
+    public boolean deleteBookingTimeslot(AvailableTimeSlot availableTimeSlot, String key) {
+        kafkaTemplate.send(Constants.AVAILABLE_TIME_SLOTS, key ,availableTimeSlot);
+        return true;
+    }
+
+
     public List<BookedTimeSlotDetails> bookedTimeSlotDetailsList() {
         return bookedTimeSlotDetailsList;
     }
@@ -51,6 +57,15 @@ public class GarageService {
                 ObjectMapper objectMapper = new ObjectMapper();
                 BookedTimeSlotDetails resultObject = objectMapper.readValue(json, BookedTimeSlotDetails.class);
                 bookedTimeSlotDetailsList.add(resultObject);
+
+                //delete the available timeslot
+                AvailableTimeSlot availableTimeSlot = AvailableTimeSlot.builder()
+                                .key(resultObject.getKey())
+                                        .status("deleted")
+                                                .build();
+               // deleteBookingTimeslot(availableTimeSlot, resultObject.getKey());
+                System.out.println(resultObject.getKey());
+
             }
         } catch (Exception e) {
             e.printStackTrace();

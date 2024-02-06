@@ -16,6 +16,8 @@ public class AvailableTimeSlot {
 
     private String status;
 
+    private String userEmailAddress;
+
     private String timeSlotAllocatedDate;
 
     private String timeSlotAllocatedTime;

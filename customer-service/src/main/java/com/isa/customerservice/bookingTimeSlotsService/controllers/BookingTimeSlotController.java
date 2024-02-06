@@ -23,9 +23,9 @@ public class BookingTimeSlotController {
     }
 
     @PreAuthorize("hasRole('ROLE_NORMAL_USER')")
-    @GetMapping("/booked")
-    public Optional<List<BookedServiceTimeSlot>> bookedServiceTimeSlots(){
-        return ResponseEntity.ok(bookingTimeSlotService.bookedServiceTimeSlots()).getBody();
+    @GetMapping("/booked/{userEmail}")
+    public Optional<List<BookedServiceTimeSlot>> bookedServiceTimeSlots(@PathVariable("userEmail") String userEmail){
+        return ResponseEntity.ok(bookingTimeSlotService.bookedServiceTimeSlots(userEmail)).getBody();
     }
 
     @PreAuthorize("hasRole('ROLE_NORMAL_USER')")
@@ -53,9 +53,9 @@ public class BookingTimeSlotController {
     }
 
     @PreAuthorize("hasRole('ROLE_NORMAL_USER')")
-    @GetMapping("/accepted")
-    public List<AcceptedBookings> acceptedBookings(){
-        return ResponseEntity.ok(bookingTimeSlotService.getAcceptedBookings()).getBody();
+    @GetMapping("/accepted/{userEmail}")
+    public List<AcceptedBookings> acceptedBookings(@PathVariable("userEmail") String userEmail){
+        return ResponseEntity.ok(bookingTimeSlotService.getAcceptedBookings(userEmail)).getBody();
     }
 
 }

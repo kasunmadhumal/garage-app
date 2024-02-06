@@ -5,16 +5,12 @@ import com.isa.customerservice.bookingTimeSlotsService.dtos.AvailableTimeSlot;
 import com.isa.customerservice.bookingTimeSlotsService.dtos.BookedTimeSlotDetails;
 import com.isa.customerservice.bookingTimeSlotsService.models.BookedServiceTimeSlot;
 import com.isa.customerservice.bookingTimeSlotsService.repositories.IBookedTimeSlotRepository;
-import com.isa.customerservice.kafkaConfig.constant.TopicsNames;
-import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
-import static com.isa.customerservice.kafkaConfig.constant.TopicsNames.AVAILABLE_TIME_SLOTS;
 
 @Service
 public class BookingTimeSlotService {
@@ -26,8 +22,8 @@ public class BookingTimeSlotService {
         this.bookedTimeSlotRepository = bookedTimeSlotRepository;
         this.kafkaCommunicationService = kafkaCommunicationService;
     }
-    public Optional<List<BookedServiceTimeSlot>> bookedServiceTimeSlots(){
-        return Optional.ofNullable(bookedTimeSlotRepository.findAll());
+    public Optional<List<BookedServiceTimeSlot>> bookedServiceTimeSlots(String userEmail){
+        return Optional.ofNullable(bookedTimeSlotRepository.findByUserEmailAddress(userEmail));
     }
 
     public Optional<String> bookServiceTimeSlot(BookedTimeSlotDetails bookedTimeSlotDetails){
@@ -35,6 +31,7 @@ public class BookingTimeSlotService {
         BookedServiceTimeSlot bookedServiceTimeSlot = BookedServiceTimeSlot.builder()
                 .id(UUID.randomUUID().toString())
                 .key(bookedTimeSlotDetails.getKey())
+                .userEmailAddress(bookedTimeSlotDetails.getUserEmailAddress())
                 .status(bookedTimeSlotDetails.getStatus())
                 .acceptedStatus(bookedTimeSlotDetails.getAcceptedStatus())
                 .numberOfVehiclesMaxAllowedForService(bookedTimeSlotDetails.getNumberOfVehiclesMaxAllowedForService())
@@ -87,8 +84,15 @@ public class BookingTimeSlotService {
         return kafkaCommunicationService.getAvailableTimeSlots();
     }
 
-    public List<AcceptedBookings> getAcceptedBookings(){
-        return kafkaCommunicationService.getAcceptedBookings();
+    public List<AcceptedBookings> getAcceptedBookings(String userEmail){
+        List<AcceptedBookings> acceptedBookings = kafkaCommunicationService.getAcceptedBookings();
+        List<AcceptedBookings> myBookings = new ArrayList<>();
+        for (AcceptedBookings acceptedBooking : acceptedBookings) {
+            if (acceptedBooking.getUserEmailAddress().equals(userEmail)) {
+                myBookings.add(acceptedBooking);
+            }
+        }
+        return myBookings;
     }
 
 }

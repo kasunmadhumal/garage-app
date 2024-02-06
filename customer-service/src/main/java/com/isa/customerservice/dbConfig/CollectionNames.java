@@ -9,5 +9,7 @@ public class CollectionNames {
 
     public static final String BOOKED_SERVICE_TIME_SLOT_COLLECTION = "booked_service_time_slot";
 
+    public static final String ACCEPTED_BOOKING_COLLECTION = "accepted_booking";
+
 
 }
