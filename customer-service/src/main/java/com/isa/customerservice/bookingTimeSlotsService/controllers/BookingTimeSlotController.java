@@ -1,8 +1,8 @@
 package com.isa.customerservice.bookingTimeSlotsService.controllers;
 
-import com.isa.customerservice.bookingTimeSlotsService.dtos.AcceptedBookings;
 import com.isa.customerservice.bookingTimeSlotsService.dtos.AvailableTimeSlot;
 import com.isa.customerservice.bookingTimeSlotsService.dtos.BookedTimeSlotDetails;
+import com.isa.customerservice.bookingTimeSlotsService.models.AcceptedBookingTimeslot;
 import com.isa.customerservice.bookingTimeSlotsService.models.BookedServiceTimeSlot;
 import com.isa.customerservice.bookingTimeSlotsService.services.BookingTimeSlotService;
 import org.springframework.http.ResponseEntity;
@@ -54,7 +54,7 @@ public class BookingTimeSlotController {
 
     @PreAuthorize("hasRole('ROLE_NORMAL_USER')")
     @GetMapping("/accepted/{userEmail}")
-    public List<AcceptedBookings> acceptedBookings(@PathVariable("userEmail") String userEmail){
+    public List<AcceptedBookingTimeslot> acceptedBookings(@PathVariable("userEmail") String userEmail){
         return ResponseEntity.ok(bookingTimeSlotService.getAcceptedBookings(userEmail)).getBody();
     }
 

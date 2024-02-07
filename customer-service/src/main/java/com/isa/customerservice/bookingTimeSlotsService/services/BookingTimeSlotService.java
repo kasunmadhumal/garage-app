@@ -1,13 +1,13 @@
 package com.isa.customerservice.bookingTimeSlotsService.services;
 
-import com.isa.customerservice.bookingTimeSlotsService.dtos.AcceptedBookings;
 import com.isa.customerservice.bookingTimeSlotsService.dtos.AvailableTimeSlot;
 import com.isa.customerservice.bookingTimeSlotsService.dtos.BookedTimeSlotDetails;
+import com.isa.customerservice.bookingTimeSlotsService.models.AcceptedBookingTimeslot;
 import com.isa.customerservice.bookingTimeSlotsService.models.BookedServiceTimeSlot;
+import com.isa.customerservice.bookingTimeSlotsService.repositories.IAcceptedBookingTimeSlotRepository;
 import com.isa.customerservice.bookingTimeSlotsService.repositories.IBookedTimeSlotRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -16,10 +16,13 @@ import java.util.UUID;
 public class BookingTimeSlotService {
 
     private final IBookedTimeSlotRepository bookedTimeSlotRepository;
+
+    private final IAcceptedBookingTimeSlotRepository acceptedBookingTimeSlotRepository;
     private final KafkaCommunicationService kafkaCommunicationService;
 
-    public BookingTimeSlotService(IBookedTimeSlotRepository bookedTimeSlotRepository, KafkaCommunicationService kafkaCommunicationService){
+    public BookingTimeSlotService(IBookedTimeSlotRepository bookedTimeSlotRepository, IAcceptedBookingTimeSlotRepository acceptedBookingTimeSlotRepository, KafkaCommunicationService kafkaCommunicationService){
         this.bookedTimeSlotRepository = bookedTimeSlotRepository;
+        this.acceptedBookingTimeSlotRepository = acceptedBookingTimeSlotRepository;
         this.kafkaCommunicationService = kafkaCommunicationService;
     }
     public Optional<List<BookedServiceTimeSlot>> bookedServiceTimeSlots(String userEmail){
@@ -84,15 +87,9 @@ public class BookingTimeSlotService {
         return kafkaCommunicationService.getAvailableTimeSlots();
     }
 
-    public List<AcceptedBookings> getAcceptedBookings(String userEmail){
-        List<AcceptedBookings> acceptedBookings = kafkaCommunicationService.getAcceptedBookings();
-        List<AcceptedBookings> myBookings = new ArrayList<>();
-        for (AcceptedBookings acceptedBooking : acceptedBookings) {
-            if (acceptedBooking.getUserEmailAddress().equals(userEmail)) {
-                myBookings.add(acceptedBooking);
-            }
-        }
-        return myBookings;
+    public List<AcceptedBookingTimeslot> getAcceptedBookings(String userEmail){
+
+        return acceptedBookingTimeSlotRepository.findByUserEmailAddress(userEmail);
     }
 
 }

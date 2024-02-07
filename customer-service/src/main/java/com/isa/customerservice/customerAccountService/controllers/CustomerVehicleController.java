@@ -37,4 +37,11 @@ public class CustomerVehicleController {
         return ResponseEntity.ok(customerVehicleService.getAllVehicles(email));
     }
 
+    @PreAuthorize("hasRole('ROLE_NORMAL_USER')")
+    @DeleteMapping("user/{userEmail}/vehicle/{vehicleNumber}")
+    public ResponseEntity<String> deleteVehicle(@PathVariable("userEmail") String userEmail, @PathVariable("vehicleNumber") String vehicleNumber){
+        return null;
+    }
+
+
 }

@@ -72,4 +72,11 @@ public class CustomerVehicleService {
         Optional<CustomerAccount> customerAccount = customerAccountRepository.findByEmail(email);
         return customerAccount.map(CustomerAccount::getOwnerVehicles).orElse(null);
     }
+
+    public String deleteVehicle(Long id){
+
+        return "deleted successfully";
+    }
+
+
 }
